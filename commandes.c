@@ -146,7 +146,7 @@ void init_formation(Commande ma_commande,Commande_Formation *commande_F){
 
 BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_UE,Matiere liste_mat[],int *nb_matiere){
     int nb_coeff_equal_zero=0;
-    int mon_coeff;
+    float mon_coeff=0.;
     
 
     if(ma_commande.nb_args!=nb_args_min_epr+nb_UE){
@@ -159,7 +159,8 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
 
     for (size_t i = 0; i < nb_UE; i++)
     {
-        mon_coeff=atoi(ma_commande.args[i+3]);
+        mon_coeff=strtof(ma_commande.args[i+3],NULL);
+        printf("%f ",mon_coeff);
         if(mon_coeff==0){
             nb_coeff_equal_zero++;
         }
@@ -199,6 +200,7 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
         return True;
     }
     else{
+        printf("nb epre: %d\n",ma_matiere.nb_epreuve);
         ma_matiere.liste_epr[ma_matiere.nb_epreuve]=*commande_E;
         ma_matiere.nb_epreuve+=1;
         liste_mat[matiere_indice]=ma_matiere;

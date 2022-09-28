@@ -26,7 +26,7 @@ typedef struct Commande_Epreuve{
     unsigned int num_semestre;
     char nom_matiere[30];
     char nom_epreuve[30];
-    unsigned int tab_coeff_UE[6];
+    float tab_coeff_UE[6]; // pb ici quand je met double il ne me le prend pas
 }Commande_Epreuve;
 
 typedef struct Commande_Coeff{

@@ -15,22 +15,24 @@ int main(){
     Commande_Epreuve commande_E;
     Matiere liste_mat[NB_MAT_MAX];
     int nb_matiere=0;
-   
+
     
     ma_commande=get_commande();
 
     //init_formation(ma_commande,&commande_F);
 
     //int nb_UE=commande_F.nb_UE;
-    int nb_UE=4;
+    int nb_UE=3;
     create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
+    //printf("%f %f %f",liste_mat[0].liste_epr[0].tab_coeff_UE[0],liste_mat[0].liste_epr[0].tab_coeff_UE[1],liste_mat[0].liste_epr[0].tab_coeff_UE[2]);
     ma_commande=get_commande();
     create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
     ma_commande=get_commande();
     create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
 
-    printf("%d\n",liste_mat[0].nb_epreuve);
-    printf("%d",liste_mat[0].nb_epreuve);
+    printf("%f %f %f %f \n",liste_mat[0].liste_epr[0].tab_coeff_UE[0],liste_mat[0].liste_epr[0].tab_coeff_UE[1],liste_mat[0].liste_epr[0].tab_coeff_UE[2],liste_mat[0].liste_epr[0].tab_coeff_UE[3]);
+    printf("%f %f %f %f",liste_mat[0].liste_epr[1].tab_coeff_UE[0],liste_mat[0].liste_epr[1].tab_coeff_UE[1],liste_mat[0].liste_epr[1].tab_coeff_UE[2],liste_mat[0].liste_epr[1].tab_coeff_UE[3]);
+    
     //epreuve_already_exist(commande_E,liste_mat,&nb_matiere,&nb_epreuve);
 
 
