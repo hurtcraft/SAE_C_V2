@@ -12,7 +12,7 @@ typedef struct Commande
     char nom_commande[30];
     int nb_args;//nb d'argument qui suit la commande , la commande n'est pas pris en comtpe comme un argument
     char args[10][30];//tableau en 2D pouvant contenir 10 arguments de type str dont la taille max est de 30 chars
-
+     
     
 }Commande;
 

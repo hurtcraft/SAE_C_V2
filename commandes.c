@@ -160,7 +160,6 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
     for (size_t i = 0; i < nb_UE; i++)
     {
         mon_coeff=strtof(ma_commande.args[i+3],NULL);
-        printf("%f ",mon_coeff);
         if(mon_coeff==0){
             nb_coeff_equal_zero++;
         }
@@ -200,7 +199,7 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
         return True;
     }
     else{
-        printf("nb epre: %d\n",ma_matiere.nb_epreuve);
+        
         ma_matiere.liste_epr[ma_matiere.nb_epreuve]=*commande_E;
         ma_matiere.nb_epreuve+=1;
         liste_mat[matiere_indice]=ma_matiere;
@@ -212,31 +211,44 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
 
 }
    
-BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, const int nb_UE){
+BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int nb_UE){
     if (semestre_is_valid(ma_commande)==False)
     {
         return False;
     }
     int num_semestre=atoi(ma_commande.args[0]);
-    int **array_UE=create_2d_array(nb_matiere,nb_UE);
+    float **array_UE=create_2d_array(nb_matiere,nb_UE);
+    
+    int count =0;
+    int nb_coeff_UE_equal_zero=0;
 
-   
     for (size_t i = 0; i < nb_matiere; i++)
     {   //parcours matieres
-        
+    
         for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
         {   //parcours epreuves
-            //if(liste_mat[i].liste_epr[j].num_semestre==num_semestre){
-                //printf("%d \n",liste_mat[i].nb_epreuve);
+            if(liste_mat[i].liste_epr[j].num_semestre==num_semestre){
+            //array_UE[i][j]=liste_mat[i].liste_epr[j].tab_coeff_UE[z];
                 for (size_t z = 0; z < nb_UE; z++)
                 {
-                    printf("%d ",liste_mat[i].liste_epr[j].tab_coeff_UE[z]);
+                    printf("%.2f  |",liste_mat[i].liste_epr[j].tab_coeff_UE[z]);
+                
                 }
-            //}
+        
+            }
+            printf("\n");
         }
-        
-        
     }
+    
+    
+    
+    
+    
+    /*
+    printf("%.2f %.2f %.2f \n",array_UE[0][0],array_UE[0][1],array_UE[0][2]);
+    printf("%.2f %.2f %.2f \n",array_UE[1][0],array_UE[1][1],array_UE[1][2]);
+    printf("%.2f %.2f %.2f \n",array_UE[2][0],array_UE[2][1],array_UE[2][2]);
+    */
     //print_array(array_UE,nb_matiere,nb_UE);
     clear_2d_array(array_UE,nb_matiere,nb_UE);
     return True;   

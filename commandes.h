@@ -11,8 +11,7 @@ BOOL create_formation(Commande ma_commande,Commande_Formation *commande_F);
 void init_formation(Commande ma_commande,Commande_Formation *commande_F);
 
 BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_UE,Matiere liste_mat[],int *nb_matiere);
-
-BOOL verif_coeff(Commande ma_comande,Matiere liste_mat[], int nb_matiere,const int nb_UE);
+BOOL verif_coeff(Commande ma_comande,Matiere liste_mat[], int nb_matiere,int nb_UE);
 
 
 #endif
