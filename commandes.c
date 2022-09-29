@@ -217,39 +217,55 @@ BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int n
         return False;
     }
     int num_semestre=atoi(ma_commande.args[0]);
-    float **array_UE=create_2d_array(nb_matiere,nb_UE);
-    
-    int count =0;
-    int nb_coeff_UE_equal_zero=0;
 
+    int *tab_UE=calloc(nb_UE,sizeof(int));
+    int count=0;
     for (size_t i = 0; i < nb_matiere; i++)
     {   //parcours matieres
     
         for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
         {   //parcours epreuves
             if(liste_mat[i].liste_epr[j].num_semestre==num_semestre){
-            //array_UE[i][j]=liste_mat[i].liste_epr[j].tab_coeff_UE[z];
+                if (liste_mat[i].nb_epreuve==0)
+                {
+                    count++;
+                    continue;
+                    
+                }
+                
                 for (size_t z = 0; z < nb_UE; z++)
                 {
-                    printf("%.2f  |",liste_mat[i].liste_epr[j].tab_coeff_UE[z]);
+                    
+                    if(liste_mat[i].liste_epr[j].tab_coeff_UE[z]>0.){
+                        tab_UE[z]+=1;
+                    }
                 
                 }
         
             }
-            printf("\n");
+            
         }
+    }
+    if (count!=0)
+    {
+        printf("Le semestre ne contient aucune epreuve\n");
+        return False;
+    }
+    
+    for (size_t i = 0; i < nb_UE; i++)
+    {
+        if (tab_UE[i]==0)
+        {
+            printf("Les coefficients d’au moins une UE de ce semestre sont tous nuls\n");
+            return False;
+        }
+        
     }
     
     
     
     
-    
-    /*
-    printf("%.2f %.2f %.2f \n",array_UE[0][0],array_UE[0][1],array_UE[0][2]);
-    printf("%.2f %.2f %.2f \n",array_UE[1][0],array_UE[1][1],array_UE[1][2]);
-    printf("%.2f %.2f %.2f \n",array_UE[2][0],array_UE[2][1],array_UE[2][2]);
-    */
-    //print_array(array_UE,nb_matiere,nb_UE);
-    clear_2d_array(array_UE,nb_matiere,nb_UE);
+    printf("Coefficients corrects\n");
+
     return True;   
 }

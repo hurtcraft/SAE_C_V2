@@ -16,16 +16,15 @@ int main(){
     Matiere liste_mat[NB_MAT_MAX];
     int nb_matiere=0;
 
-    
+
+
+    init_formation(ma_commande,&commande_F);
+
+    int nb_UE=commande_F.nb_UE;
     ma_commande=get_commande();
 
-    //init_formation(ma_commande,&commande_F);
-
-    //int nb_UE=commande_F.nb_UE;
     
-
     
-    int nb_UE=3;
     create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
     ma_commande=get_commande();
     create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
