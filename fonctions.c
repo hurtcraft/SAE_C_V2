@@ -49,6 +49,7 @@ BOOL epreuve_already_exist(Commande_Epreuve commande_E,Matiere liste_mat[],int n
     
 }
 BOOL semestre_is_valid(Commande ma_commande){
+    //on sait que si une commande a besoin du numero de semestre , ce dernier sera toujours le premier arg
     if (atoi(ma_commande.args[0])>2 || atoi(ma_commande.args[0])<1 ){
         printf("Le numero de semestre saisie est incorrect\n");
         return False;

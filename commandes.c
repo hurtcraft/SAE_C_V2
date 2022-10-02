@@ -13,8 +13,6 @@ Commande get_commande(){
     
     ma_commande.nb_args=0;
     
-
-    printf("saisir commande : ");
     scanf(" %[^\n]",buffer);
 
     if (strcmp(buffer,"exit")==0)
@@ -24,7 +22,6 @@ Commande get_commande(){
         exit_prog();
     }
 
-    
     if(buffer[strlen(buffer)+1]==' '){
         buffer[strlen(buffer)]='\0';
     }
@@ -195,18 +192,18 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
         ma_matiere.nb_epreuve+=1;
         liste_mat[*nb_matiere]=ma_matiere;
         *nb_matiere+=1;
-        printf("Matiere ajoute a la formation\n");
-        return True;
+        printf("Matiere ajoutee a la formation\n");
+        
     }
     else{
         
         ma_matiere.liste_epr[ma_matiere.nb_epreuve]=*commande_E;
         ma_matiere.nb_epreuve+=1;
         liste_mat[matiere_indice]=ma_matiere;
-        printf("Epreuve ajouter a la formation\n");
-        return True;
         
     }
+    printf("Epreuve ajoutee a la formation\n");
+    return True;
 
 
 }
@@ -268,4 +265,134 @@ BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int n
     printf("Coefficients corrects\n");
 
     return True;   
+}
+
+void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant liste_etu[],int *nb_etudiant){
+    if (semestre_is_valid(ma_commande)==False)
+    {
+        return;
+    }
+    
+    Commande_Note ma_note;
+    // on met les données de "ma_commande" dans "ma_note"
+    ma_note.num_semestre=atoi(ma_commande.args[0]);
+    strcpy(ma_note.nom_etudiant,ma_commande.args[1]);
+    strcpy(ma_note.nom_matiere,ma_commande.args[2]);
+    strcpy(ma_note.nom_epreuve,ma_commande.args[3]);
+    ma_note.note=atoi(ma_commande.args[4]);
+    Etudiant mon_etudiant;
+
+    BOOL matiere_exist=False;
+    BOOL epreuve_exist=False;
+    int etudiant_indice=-1;
+    for (size_t i = 0; i < nb_matiere; i++)
+    {
+        if (strcmp(liste_mat[i].nom,ma_note.nom_matiere)==0)
+        {
+            matiere_exist=True;
+        }
+
+        for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
+        {
+            if (strcmp(liste_mat[i].liste_epr[j].nom_epreuve,ma_note.nom_epreuve)==0)
+            {
+                epreuve_exist=True;
+            }
+            
+        }
+        
+    }
+    if (matiere_exist==False)
+    {
+        printf("Matiere inconnue\n");
+        return;
+    }
+    if (epreuve_exist==False)
+    {
+        printf("Epreuve inconnue\n");
+        return;
+    }
+
+    if (ma_note.note>20 && ma_note.note<0)
+    {
+        printf("Note incorrecte\n");
+        return;
+    }
+    // pb "une note deja ajouter a letudiant"
+        
+
+    
+    for (size_t z = 0; z < *nb_etudiant; z++)
+    {
+        if (strcmp(liste_etu[z].nom,ma_note.nom_etudiant)==0)
+        {
+            etudiant_indice=z;
+            for (size_t i = 0; i < nb_matiere; i++)
+            {//parcours des matieres
+                if (strcmp(mon_etudiant.liste_evaluation_matiere[i].nom,ma_note.nom_matiere)==0)
+                {
+                    for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
+                    {
+                        if (strcmp(mon_etudiant.liste_evaluation_matiere[i].liste_epr[j].nom_epreuve,ma_note.nom_epreuve)==0)
+                        {
+                            printf("Une note est deja definie pour cet etudiant\n");
+                            return;
+                        }
+
+                        
+                    }
+                }
+            
+            }
+    
+            break;// on fait un break ici car lorsqu'on trouve l'etudiant en question, on a plus besoin de parcourir le reste de la liste d'etu
+        }
+        
+    }
+    //creation nv etudiant si il n'est pas dans la liste
+    //strcpy(mon_etudiant.liste_evaluation_matiere[0].nom,"math");
+    //strcpy(mon_etudiant.liste_evaluation_matiere[0].liste_epr[0].nom_epreuve,"dst");
+    //strcpy(mon_etudiant.liste_evaluation_matiere[0].liste_epr[1].nom_epreuve,"proj");
+    int indice_epreuve;
+    if (etudiant_indice==-1)
+    {
+
+        strcpy(mon_etudiant.nom,ma_note.nom_etudiant);
+        mon_etudiant.nb_matiere_evalue=0;
+        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve=0;
+        indice_epreuve=mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve;
+
+
+        
+        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].num_semestre=ma_note.num_semestre;
+        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant=ma_note.note;
+        strcpy(mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].nom_epreuve,ma_note.nom_epreuve);
+        strcpy(mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].nom,ma_note.nom_matiere);
+        
+        mon_etudiant.nb_matiere_evalue+=1;
+        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve+=1;
+        printf("%d\n",mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve);
+        liste_etu[*nb_etudiant]=mon_etudiant;
+        *nb_etudiant+=1;
+        
+    }
+    else{
+        strcpy(liste_etu[etudiant_indice].nom,ma_note.nom_etudiant);
+        
+        //les ligne du bas la
+        indice_epreuve=liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].indice_epreuve;
+        printf("indice : %d\n ",etudiant_indice);
+        liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].liste_epr[indice_epreuve].num_semestre=ma_note.num_semestre;
+        liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant=ma_note.note;
+        printf("note %f\n",liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant);
+        strcpy(liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].liste_epr[indice_epreuve].nom_epreuve,ma_note.nom_epreuve);
+        
+        strcpy(liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].nom,ma_note.nom_matiere);
+        liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].indice_epreuve+=1;
+        printf("%d\n",liste_etu[etudiant_indice].liste_evaluation_matiere[liste_etu[etudiant_indice].nb_matiere_evalue].indice_epreuve);
+
+
+    }
+
+
 }
