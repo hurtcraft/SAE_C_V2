@@ -31,10 +31,7 @@ typedef struct Commande_Epreuve{
     float note_etudiant;// cet attribut ne nous sert que dans le cas de la commande "notes"
 }Commande_Epreuve;
 
-typedef struct Commande_Coeff{
-    unsigned int num_semetres;
 
-}Commande_Coeff;
 typedef struct Commande_Note
 {
     int num_semestre;
@@ -77,5 +74,6 @@ typedef struct Etudiant
         
     */
 }Etudiant;
+
 
 #endif
