@@ -20,13 +20,13 @@ int main(){
     Etudiant etudiant;
     Matiere math;
     Matiere fr;
-    
+    /*
     strcpy(math.nom,"math");
     strcpy(math.liste_epr[0].nom_epreuve,"dst");
     strcpy(math.liste_epr[1].nom_epreuve,"proj");
     math.nb_epreuve=2;
-    math.liste_epr[0].num_semestre=2;
-    math.liste_epr[1].num_semestre=2;
+    math.liste_epr[0].num_semestre=1;
+    math.liste_epr[1].num_semestre=1;
     liste_mat[0]=math;
     nb_matiere++;
 
@@ -46,8 +46,9 @@ int main(){
     printf("etu %s\n",liste_etu[0].nom);
     ma_commande=get_commande();
     verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere);
-
-    /*
+    */
+   
+    
     init_formation(ma_commande,&commande_F);
 
     int nb_UE=commande_F.nb_UE;
@@ -74,7 +75,10 @@ int main(){
     add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
     ma_commande=get_commande();
     add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
-    /*
+    
+    ma_commande=get_commande();
+    verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere);
+    
     //add_note(ma_commande,nb_matiere);
     
 

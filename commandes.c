@@ -357,7 +357,8 @@ void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant l
     int indice_epreuve;
     if (etudiant_indice==-1)
     {
-        
+        mon_etudiant.nb_note_s1=0;
+        mon_etudiant.nb_note_s1=0;
         mon_etudiant.nb_matiere_evalue=0;
         mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve=0;
 
@@ -374,7 +375,14 @@ void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant l
         mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve+=1;
         mon_etudiant.nb_matiere_evalue+=1;
         mon_etudiant.nb_note+=1;
-
+        if (ma_note.num_semestre==1)
+        {
+            mon_etudiant.nb_note_s1+=1;
+        }
+        else{
+            mon_etudiant.nb_note_s2+=1;
+        }
+        
         liste_etu[*nb_etudiant]=mon_etudiant;
         *nb_etudiant+=1;
         printf("Etudiant ajoute a la formation\n");
@@ -409,7 +417,13 @@ void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant l
         liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].num_semestre=ma_note.num_semestre;
         liste_etu[etudiant_indice].nb_note+=1;
         liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].indice_epreuve+=1;
-
+        if (ma_note.num_semestre==1)
+        {
+            liste_etu[etudiant_indice].nb_note_s1+=1;
+        }
+        else{
+            liste_etu[etudiant_indice].nb_note_s2+=1;
+        }
         //printf("nom epr %s\n",liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].nom_epreuve);
         
     }
@@ -418,6 +432,7 @@ void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant l
 
 }
 void verif_note(Commande ma_commande,Etudiant liste_etu[], Matiere liste_mat[],int nb_etudiant,int nb_matiere){
+    
     if(semestre_is_valid(ma_commande)==False){
         return;
     }
@@ -460,6 +475,7 @@ void verif_note(Commande ma_commande,Etudiant liste_etu[], Matiere liste_mat[],i
         }
         
     }
-    printf("nb total note %d\n",nb_note_total);
+    printf("nb note %d au semestre %d de %s\n",liste_etu[0].nb_note_s1,num_semestre,liste_etu[0].nom);
+    printf("nb note %d au semestre %d de %s\n",liste_etu[0].nb_note_s2,num_semestre,liste_etu[0].nom);
     
 }

@@ -56,6 +56,8 @@ typedef struct Etudiant
 {
     char nom[30];
     int nb_note;
+    int nb_note_s1;
+    int nb_note_s2;
     int nb_matiere_evalue;
     Matiere liste_evaluation_matiere[10];
 
