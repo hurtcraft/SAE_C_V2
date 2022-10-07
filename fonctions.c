@@ -56,41 +56,20 @@ BOOL semestre_is_valid(Commande ma_commande){
     }
     return True;
 }
-float **create_2d_array(int row,int col){
-    static float **array=NULL;
-    array=malloc(sizeof(float*)*row);
-    if (array==NULL)
+int get_etudiant_indice(char nom_etudiant[],Etudiant liste_etu[],int nb_etudiant){
+    // return l'indice de l'etudiant dans la liste d'etudiant
+    // si l'etudiant n'existe pas on renvoie -1
+    int indice_etudiant=-1;//si l'etudiant n'est pas dans la liste
+
+    for (size_t i = 0; i < nb_etudiant; i++)
     {
-        printf("pb alloc ");
-        exit(EXIT_FAILURE);
-    }
-    for (size_t i = 0; i < row; i++)
-    {
-        array[i]=malloc(sizeof(float)*col);
-        if (array[i]==NULL)
+        if (strcmp(liste_etu[i].nom,nom_etudiant)==0)
         {
-            printf("pb alloc ");
-            exit(EXIT_FAILURE);
+            indice_etudiant=i;
+            break;
+            
         }
+        
     }
-    return array;
-    
-}
-void clear_2d_array(float **array,int row,int col){
-    for (size_t i = 0; i < row; i++)
-    {
-        free(array[i]);
-    }
-    free(array);
-}
-void print_array(float **array, int row , int col){
-    for (size_t i = 0; i < row; i++)
-    {
-        for (size_t j = 0; j < col; j++)
-        {
-            printf("%f ",array[i][j]);
-        }
-        printf("\n");
-    }
-    
+    return indice_etudiant;
 }

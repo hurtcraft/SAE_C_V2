@@ -1,30 +1,24 @@
 formation 3
 epreuve 1 Programmation Projet 1 2 0
+epreuve 2 Architecture Interrogation 1 0 2
 epreuve 1 Programmation DST 2 3 0
+epreuve 2 Architecture DST 0 1 4
 epreuve 1 SGBD Participation 0.5 0 0.5
+epreuve 2 Systeme QCM 2 3 0.5
 epreuve 1 SGBD Rapport 1.5 0 1.5
-coefficients 1
+epreuve 2 Systeme Expose 3 2 0.5
+exit
 note 1 Paul Programmation Projet 12
 note 1 Paul Programmation DST 9
 note 1 Paul SGBD Participation 16
+notes 1 Paul
 note 1 Paul SGBD Rapport 12
-note 1 jul Programmation Projet 12
-note 1 jul Programmation DST 9
-note 1 jul SGBD Participation 16
-note 1 jul SGBD Rapport 12
-notes 1 jul
-releve 1 Paul
-exit
-epreuve 2 Architecture Interrogation 1 0 2
-epreuve 2 Architecture DST 0 1 4
-epreuve 2 Systeme QCM 2 3 0.5
-epreuve 2 Systeme Expose 3 2 0.5
-coefficients 2
+notes 1 Paul
 note 2 Paul Architecture Interrogation 18
 note 2 Paul Architecture DST 12
 note 2 Paul Systeme QCM 7
-note 2 Paul Systeme Expose 8
 notes 2 Paul
-releve 2 Paul
-decision Paul
+note 2 Paul Systeme Expose 8
+exit
+notes 2 Paul
 exit

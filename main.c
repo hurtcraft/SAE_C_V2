@@ -52,39 +52,28 @@ int main(){
     init_formation(ma_commande,&commande_F);
 
     int nb_UE=commande_F.nb_UE;
-
-    ma_commande=get_commande();
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-
-    ma_commande=get_commande();
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-
-    ma_commande=get_commande();
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-
-    ma_commande=get_commande();
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-    ma_commande=get_commande();
-    verif_coeff(ma_commande,liste_mat,nb_matiere,nb_UE);
-
-    ma_commande=get_commande();
-    add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
-    ma_commande=get_commande();
-    add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
-    ma_commande=get_commande();
-    add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
-    ma_commande=get_commande();
-    add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
+    do
+    {
+        ma_commande=get_commande();
+        if (strcmp(ma_commande.nom_commande,"epreuve")==0)
+        {
+            create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
+        }
+        else if(strcmp(ma_commande.nom_commande,"coefficients")==0) {
+            verif_coeff(ma_commande,liste_mat,nb_matiere,nb_UE);
+        }
+        else if (strcmp(ma_commande.nom_commande,"note")==0){
+            add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
+        }
+        else if (strcmp(ma_commande.nom_commande,"notes")==0){
+            verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere);
+        }
+        printf("nb matiere %d\n",nb_matiere);
+    } while (True);
     
-    ma_commande=get_commande();
-    verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere);
     
     //add_note(ma_commande,nb_matiere);
     
-
-
-
-
 
 
 

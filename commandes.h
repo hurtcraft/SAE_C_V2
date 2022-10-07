@@ -4,7 +4,6 @@
 
 
 Commande get_commande();
-void analyse_commande(Commande ma_commande);
 void exit_prog();
 
 BOOL create_formation(Commande ma_commande,Commande_Formation *commande_F);
@@ -14,5 +13,6 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
 BOOL verif_coeff(Commande ma_comande,Matiere liste_mat[], int nb_matiere,int nb_UE);
 
 void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant liste_etu[],int *nb_etudiant);
-void verif_note(Commande ma_commande,Etudiant liste_etu[], Matiere liste_mat[],int nb_etudiant,int nb_matiere);
+BOOL verif_note(Commande ma_commande,Etudiant liste_etu[], Matiere liste_mat[],int nb_etudiant,int nb_matiere);
+void affichage_releve(Commande ma_commande, Etudiant liste_etu[],Matiere liste_mat[],int nb_matiere,int nb_etudiant,int nb_UE);
 #endif
