@@ -61,7 +61,7 @@ Commande get_commande(){
 }
 
 void exit_prog(){
-    printf("programme terminé :)\n");
+    
     exit(EXIT_SUCCESS);
 }
 
@@ -70,31 +70,19 @@ void exit_prog(){
 BOOL create_formation(Commande ma_commande,Commande_Formation *commande_F){
     /* return True si la formation à pu se créer
     */
-    if (ma_commande.nb_args!=1)
-    {
-        printf("trop ou pas assez de d'argument pour la commande <formation>\n ex: <formation> <nb_UE:INT>\n");
-        return False;
-    }
-    int nb_UE;
-    if (*ma_commande.args[0]>=48 && *ma_commande.args[0]<=57)
-    //ma_commande.args doit etre compris entre 0 et 9 soit 48 et 57 dans la table ascii
-    {
-        nb_UE=atoi(ma_commande.args[0]);
-    }
-    else{
-        printf("saisie incorrect <formation> <nb_UE:INT>\n");
-        return False;
-    }
+
+    int nb_UE=atoi(ma_commande.args[0]);
+
 
     if (commande_F->nb_UE_is_def==True){
-        printf("Le nombre d'UE est deja definie\n");
+        printf("Le nombre d'UE est deja defini\n");
         return False;
     }
     
     else if(nb_UE>=3 && nb_UE<=6){
-        printf("Le nombre d'UE est definie\n");
-        commande_F->nb_UE_is_def=True;
-        commande_F->nb_UE=nb_UE;
+        printf("Le nombre d'UE est defini\n");
+        commande_F->nb_UE_is_def = True;
+        commande_F->nb_UE = nb_UE;
         return True;
         
     }
@@ -106,39 +94,22 @@ BOOL create_formation(Commande ma_commande,Commande_Formation *commande_F){
 
 }
 
-void init_formation(Commande ma_commande,Commande_Formation *commande_F){
-    commande_F->nb_UE_is_def=False;
-    BOOL formation_is_valid=False;
-    
-    while (formation_is_valid==False)
-    {
 
-        ma_commande=get_commande();
-        if(strcmp(ma_commande.nom_commande,"formation")!=0 ){
-            printf("Le nombre d'UE n'est pas definie\n");
-            continue;
-        }
-        else{
-            formation_is_valid=create_formation(ma_commande,&*commande_F);
-            
-                    
-            if(commande_F->nb_UE_is_def==False){
-                printf("le nombre d'UE n'est pas definie\n");
-                continue;
-            }
-        }
-
+BOOL create_epreuve(Commande ma_commande ,int nb_UE,Commande_Formation *ma_formation){
+    if (semestre_is_valid(ma_commande) == False){
+        return False;
     }
 
-}
-
-BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_UE,Matiere liste_mat[],int *nb_matiere){
-    int nb_coeff_equal_zero=0;
-    float mon_coeff=0.;
+    int nb_coeff_equal_zero = 0;
+    float mon_coeff = 0.;
+    Commande_Epreuve commande_E;
     
-    commande_E->num_semestre=atoi(ma_commande.args[0]);   
-    strcpy(commande_E->nom_matiere,ma_commande.args[1]);
-    strcpy(commande_E->nom_epreuve,ma_commande.args[2]); 
+    commande_E.num_semestre = atoi(ma_commande.args[0]);   
+    strcpy(commande_E.nom_matiere,ma_commande.args[1]);
+    strcpy(commande_E.nom_epreuve,ma_commande.args[2]); 
+    Matiere *liste_mat=ma_formation->liste_semestre[commande_E.num_semestre-1].liste_mat;
+    int nb_matiere=ma_formation->liste_semestre[commande_E.num_semestre-1].nb_matiere;
+    
 
     for (size_t i = 0; i < nb_UE; i++)
     {
@@ -150,57 +121,52 @@ BOOL create_epreuve(Commande ma_commande , Commande_Epreuve *commande_E, int nb_
             printf("Au moins un des coefficients est incorrect\n");
             return False;
         }
-        commande_E->tab_coeff_UE[i]=mon_coeff;
+        commande_E.tab_coeff_UE[i] = mon_coeff;
     }
 
-    if(nb_coeff_equal_zero==nb_UE){
-        printf("Au moins un des coefficients doit etre positif\n");
-        return False;
-    }
-    if (semestre_is_valid(ma_commande)==False){
-        return False;
-    }
-
-    
-
-    int matiere_indice=get_matiere_indice(*commande_E,liste_mat,*nb_matiere);
+    int matiere_indice=get_matiere_indice(commande_E.nom_matiere,liste_mat,nb_matiere);
     Matiere ma_matiere;
-    if (epreuve_already_exist(*commande_E,liste_mat,*nb_matiere)==True){
+    if (epreuve_already_exist(commande_E,liste_mat,nb_matiere)==True)
+    {
         printf("Une meme epreuve existe deja\n");
         return False;
-
     }
+    if(nb_coeff_equal_zero==nb_UE){
+        printf("Au moins un des coefficients est incorrect\n");
+        return False;
+    }
+        
     if (matiere_indice==-1){
         // creation matiere
         
         ma_matiere.nb_epreuve=0;
-        strcpy(ma_matiere.nom,commande_E->nom_matiere);
-        ma_matiere.liste_epr[ma_matiere.nb_epreuve]=*commande_E;
+        strcpy(ma_matiere.nom,commande_E.nom_matiere);
+        ma_matiere.liste_epr[ma_matiere.nb_epreuve]=commande_E;
         ma_matiere.nb_epreuve+=1;
-        liste_mat[*nb_matiere]=ma_matiere;
-        *nb_matiere+=1;
+        liste_mat[nb_matiere]=ma_matiere;
+        nb_matiere+=1;
         printf("Matiere ajoutee a la formation\n");
+
+        ma_formation->liste_semestre[commande_E.num_semestre-1].nb_matiere++;
         
     }
     else{
-        
-        ma_matiere.liste_epr[ma_matiere.nb_epreuve]=*commande_E;
-        ma_matiere.nb_epreuve+=1;
-        liste_mat[matiere_indice]=ma_matiere;
-        
+        liste_mat[matiere_indice].liste_epr[liste_mat[matiere_indice].nb_epreuve] = commande_E;
+        liste_mat[matiere_indice].nb_epreuve += 1;
     }
     printf("Epreuve ajoutee a la formation\n");
     return True;
-
 }
-   
-BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int nb_UE){
+
+BOOL verif_coeff(Commande ma_commande ,Commande_Formation ma_formation){
     if (semestre_is_valid(ma_commande)==False)
     {
         return False;
     }
     int num_semestre=atoi(ma_commande.args[0]);
-
+    int nb_UE=ma_formation.nb_UE;
+    int nb_matiere = ma_formation.liste_semestre[num_semestre-1].nb_matiere;
+    Matiere *liste_mat=ma_formation.liste_semestre[num_semestre-1].liste_mat;
     int *tab_UE=calloc(nb_UE,sizeof(int));
     int count=0;
     for (size_t i = 0; i < nb_matiere; i++)
@@ -213,7 +179,6 @@ BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int n
                 {
                     count++;
                     continue;
-                    
                 }
                 
                 for (size_t z = 0; z < nb_UE; z++)
@@ -229,12 +194,12 @@ BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int n
             
         }
     }
-    if (count!=0)
+    if (nb_matiere==0)
     {
         printf("Le semestre ne contient aucune epreuve\n");
         return False;
     }
-    
+
     for (size_t i = 0; i < nb_UE; i++)
     {
         if (tab_UE[i]==0)
@@ -246,41 +211,43 @@ BOOL verif_coeff(Commande ma_commande ,Matiere liste_mat[],int nb_matiere, int n
     }
     
     
-    
-    
     printf("Coefficients corrects\n");
 
     return True;   
 }
 
-void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant liste_etu[],int *nb_etudiant){
+
+void add_note(Commande ma_commande,Commande_Formation ma_formation,Etudiant liste_etu[],int *nb_etudiant){
     if (semestre_is_valid(ma_commande)==False)
     {
         return;
     }
-    
-    Commande_Note ma_note;
-    // on met les données de "ma_commande" dans "ma_note"
-    ma_note.num_semestre=atoi(ma_commande.args[0]);
-    strcpy(ma_note.nom_etudiant,ma_commande.args[1]);
-    strcpy(ma_note.nom_matiere,ma_commande.args[2]);
-    strcpy(ma_note.nom_epreuve,ma_commande.args[3]);
-    ma_note.note=atof(ma_commande.args[4]);
-    Etudiant mon_etudiant;
 
+    int num_semestre=atoi(ma_commande.args[0]);
+    char nom_etudiant[MAX_CHAR];
+    char nom_matiere[MAX_CHAR];
+    char nom_epreuve[MAX_CHAR];
+    float note = atof(ma_commande.args[4]);
+    strcpy(nom_etudiant,ma_commande.args[1]);
+    strcpy(nom_matiere,ma_commande.args[2]);
+    strcpy(nom_epreuve,ma_commande.args[3]);
+
+    Etudiant mon_etudiant;
+    Matiere *liste_mat=ma_formation.liste_semestre[num_semestre-1].liste_mat;
     BOOL matiere_exist=False;
     BOOL epreuve_exist=False;
     int etudiant_indice=-1;
+    int nb_matiere = ma_formation.liste_semestre[num_semestre-1].nb_matiere;
     for (size_t i = 0; i < nb_matiere; i++)
     {
-        if (strcmp(liste_mat[i].nom,ma_note.nom_matiere)==0)
+        if (strcmp(liste_mat[i].nom,nom_matiere)==0)
         {
             matiere_exist=True;
         }
 
         for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
         {
-            if (strcmp(liste_mat[i].liste_epr[j].nom_epreuve,ma_note.nom_epreuve)==0)
+            if (strcmp(liste_mat[i].liste_epr[j].nom_epreuve, nom_epreuve)==0)
             {
                 epreuve_exist=True;
             }
@@ -299,28 +266,26 @@ void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant l
         return;
     }
 
-    if (ma_note.note>20 && ma_note.note<0)
+    if ( note>20 || note<0)
     {
         printf("Note incorrecte\n");
         return;
     }
-    // pb "une note deja ajouter a letudiant"
-        
 
     
     for (size_t z = 0; z < *nb_etudiant; z++)
     {
-        if (strcmp(liste_etu[z].nom,ma_note.nom_etudiant)==0)
+        if (strcmp(liste_etu[z].nom, nom_etudiant)==0)
         {
             etudiant_indice=z;
             for (size_t i = 0; i < nb_matiere; i++)
             {//parcours des matieres
-                if (strcmp(mon_etudiant.liste_evaluation_matiere[i].nom,ma_note.nom_matiere)==0)
+                if (strcmp(mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[i].nom, nom_matiere)==0)
                 {
                     for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
                     {
-                        if (strcmp(mon_etudiant.liste_evaluation_matiere[i].liste_epr[j].nom_epreuve,ma_note.nom_epreuve)==0)
-                        {
+                        if (strcmp(mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[i].liste_epr[j].nom_epreuve, nom_epreuve)==0)
+                        {   
                             printf("Une note est deja definie pour cet etudiant\n");
                             return;
                         }
@@ -335,143 +300,101 @@ void add_note(Commande ma_commande,int nb_matiere,Matiere liste_mat[],Etudiant l
         }
         
     }
-    //creation nv etudiant si il n'est pas dans la liste
-    //strcpy(mon_etudiant.liste_evaluation_matiere[0].nom,"math");
-    //strcpy(mon_etudiant.liste_evaluation_matiere[0].liste_epr[0].nom_epreuve,"dst");
-    //strcpy(mon_etudiant.liste_evaluation_matiere[0].liste_epr[1].nom_epreuve,"proj");
+
     int indice_epreuve;
     if (etudiant_indice==-1)
     {
-        mon_etudiant.nb_note_s1=0;
-        mon_etudiant.nb_note_s1=0;
+        mon_etudiant.liste_note_semestre[num_semestre-1].nb_note=0;
+        // ici
         mon_etudiant.nb_matiere_evalue=0;
-        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve=0;
 
-        indice_epreuve = mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve;
-        strcpy(mon_etudiant.nom,ma_note.nom_etudiant);
+        mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].indice_epreuve=0;
 
+        indice_epreuve = mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].indice_epreuve;
+        strcpy(mon_etudiant.nom, nom_etudiant);
+
+        mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant = note;
+        strcpy(mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].nom_epreuve, nom_epreuve);
+        strcpy(mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].nom ,  nom_matiere);
         
-        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].num_semestre=ma_note.num_semestre;
-        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant=ma_note.note;
-        strcpy(mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].nom_epreuve,ma_note.nom_epreuve);
-        strcpy(mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].nom , ma_note.nom_matiere);
         
-        
-        mon_etudiant.liste_evaluation_matiere[mon_etudiant.nb_matiere_evalue].indice_epreuve+=1;
+        mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].indice_epreuve+=1;
         mon_etudiant.nb_matiere_evalue+=1;
         mon_etudiant.nb_note+=1;
-        if (ma_note.num_semestre==1)
-        {
-            mon_etudiant.nb_note_s1+=1;
-        }
-        else{
-            mon_etudiant.nb_note_s2+=1;
-        }
+        mon_etudiant.liste_note_semestre[num_semestre-1].nb_note+=1;
         
         liste_etu[*nb_etudiant]=mon_etudiant;
         *nb_etudiant+=1;
         printf("Etudiant ajoute a la formation\n");
         
     }
+    // jusquici ok 
     else{
-        strcpy(liste_etu[etudiant_indice].nom,ma_note.nom_etudiant);
-        int indice_matiere=-1;
-        for (size_t i = 0; i < nb_matiere; i++)
-        {
+        
+        strcpy(liste_etu[etudiant_indice].nom, nom_etudiant);
+        // on regarde si l'etudiant a une note dans la matiere en question
+        int indice_matiere=get_matiere_indice(nom_matiere,liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat , liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].nb_matiere);
 
-            if (strcmp(liste_etu[etudiant_indice].liste_evaluation_matiere[i].nom,ma_note.nom_matiere)==0)
-            {
-                indice_matiere=i;
-                break;
-            }
-            
-            
-        }
         if (indice_matiere==-1)
         {
-            indice_matiere=liste_etu[etudiant_indice].nb_matiere_evalue;
+            indice_matiere = liste_etu[etudiant_indice].nb_matiere_evalue;
             liste_etu[etudiant_indice].nb_matiere_evalue+=1;
         }
-        
-        
-        
-        indice_epreuve=liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].indice_epreuve;
-        strcpy(liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].nom_epreuve,ma_note.nom_epreuve);
-        strcpy(liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].nom_matiere,ma_note.nom_matiere);
-        liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].note_etudiant=ma_note.note;
-        liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].num_semestre=ma_note.num_semestre;
+        indice_epreuve = liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].indice_epreuve;
+        strcpy(liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].nom_epreuve, nom_epreuve);
+        strcpy(liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].nom_matiere, nom_matiere);
+        liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].note_etudiant = note;
+        liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].num_semestre = num_semestre;
         liste_etu[etudiant_indice].nb_note+=1;
-        liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].indice_epreuve+=1;
-        if (ma_note.num_semestre==1)
-        {
-            liste_etu[etudiant_indice].nb_note_s1+=1;
-        }
-        else{
-            liste_etu[etudiant_indice].nb_note_s2+=1;
-        }
-        //printf("nom epr %s\n",liste_etu[etudiant_indice].liste_evaluation_matiere[indice_matiere].liste_epr[indice_epreuve].nom_epreuve);
+        liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].indice_epreuve+=1;
+        liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].nb_note+=1;
         
     }
     printf("Note ajoutee a l'etudiant\n");
-    
-
 }
-BOOL verif_note(Commande ma_commande,Etudiant liste_etu[], Matiere liste_mat[],int nb_etudiant,int nb_matiere){
+
+
+
+BOOL verif_note(Commande ma_commande,Etudiant liste_etu[], Commande_Formation ma_formation ,int nb_etudiant){
     
     if(semestre_is_valid(ma_commande)==False){
         return False;
     }
-    int num_semestre;
+
     char nom_etudiant[31];
     strcpy(nom_etudiant,ma_commande.args[1]);
-    int nb_note_total=0;
+    int nb_note_total_semestre=0;
     int indice_etudiant=get_etudiant_indice(nom_etudiant,liste_etu,nb_etudiant);
-    num_semestre=atoi(ma_commande.args[0]);
-    
+    int num_semestre=atoi(ma_commande.args[0]);
+    Matiere *liste_mat=ma_formation.liste_semestre[num_semestre-1].liste_mat;
+    int nb_matiere=ma_formation.liste_semestre[num_semestre-1].nb_matiere;
+
 
     if (indice_etudiant==-1)
     {
         printf("Etudiant inconnu\n");
         return False;
     }
-
     for (size_t i = 0; i < nb_matiere; i++)
     {
-        // printf("matiere : %d\n",liste_mat[i].nb_epreuve);
-        // nb_note_total+=liste_mat[i].nb_epreuve;
-        for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
-        {
-            
-            if (liste_mat[i].liste_epr[j].num_semestre==num_semestre)
-            {
-                nb_note_total+=1;
-                
-            }
-               
-            
-        }
-        
+        nb_note_total_semestre+=liste_mat[i].nb_epreuve;
     }
-    if (num_semestre==1)
-    {
-        if (liste_etu[indice_etudiant].nb_note_s1<nb_note_total)
-        {
-            printf("Il manque au moins une note pour cet etudiant\n");
-            return False;
-        }
-    }
-    else{
-        if (liste_etu[indice_etudiant].nb_note_s2<nb_note_total){
-            printf("Il manque au moins une note pour cet etudiant\n");
-            return False;
-        }
 
+    int nombre_note_etudiant=liste_etu[indice_etudiant].liste_note_semestre[num_semestre-1].nb_note ;
+    if (nombre_note_etudiant < nb_note_total_semestre)
+    {
+        printf("Il manque au moins une note pour cet etudiant\n");
+        return False;
     }
+
     printf("Notes correctes\n");
     return True;
-}
 
-void affichage_releve(Commande ma_commande, Etudiant liste_etu[],Matiere liste_mat[],int nb_matiere,int nb_etudiant,int nb_UE){
+}
+    
+
+
+void affichage_releve(Commande ma_commande, Etudiant liste_etu[],Commande_Formation ma_formation,int nb_etudiant){
     if (semestre_is_valid(ma_commande)==False)
     {
         return;
@@ -480,30 +403,52 @@ void affichage_releve(Commande ma_commande, Etudiant liste_etu[],Matiere liste_m
     strcpy(nom_etudiant,ma_commande.args[1]);
     int num_semestre=atoi(ma_commande.args[0]);
     int indice_etudiant=get_etudiant_indice(nom_etudiant,liste_etu,nb_etudiant);
-    
+
+    Matiere *liste_mat_etudiant=liste_etu[indice_etudiant].liste_note_semestre[num_semestre-1].liste_mat;
+    int nb_matiere = ma_formation.liste_semestre[num_semestre-1].nb_matiere;
+    int nb_UE = ma_formation.nb_UE;
+
     if (indice_etudiant==-1)
     {
         printf("Etudiant inconnu\n");
         return;
     }
     printf("ok");
-    if (verif_coeff(ma_commande,liste_mat,nb_matiere,nb_UE)==False)
+    if (verif_coeff(ma_commande,ma_formation)==False)
     {
         printf("Les coefficients de ce semestre sont incorrects");
         return;
     }
-    if (verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere)==False)
+    if (verif_note(ma_commande,liste_etu,ma_formation,nb_etudiant)==False)
     {
         return;
     }
+    for (size_t i = 1; i < nb_UE+1 ; i++)
+    {
+        if(i==1){
+            printf("              UE%d",i);
+        }
+        else if (i<nb_UE){
+            printf("   UE%d",i);
+        }
+        else{
+            printf("   UE%d\n",i);
+        }
+    }
+    // tkt frero check l'ennoncer a partir de la tva comprendre 
+    for (size_t i = 0; i < nb_matiere; i++)
+    {
+        printf("%s ",liste_mat_etudiant[i].nom);
+        for (size_t j = 0; j < count; j++)
+        {
+            
+        }
+        
+    }
     
     
-
-
-
+    
 }
-
-
 
 
 

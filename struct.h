@@ -15,13 +15,6 @@ typedef struct Commande
      
     
 }Commande;
-
-typedef struct Commande_Formation{
-    BOOL nb_UE_is_def;
-    unsigned int nb_UE;
-
-}Commande_Formation;
-
 typedef struct Commande_Epreuve{
     unsigned int num_semestre;
     char nom_matiere[MAX_CHAR];
@@ -31,18 +24,6 @@ typedef struct Commande_Epreuve{
     float note_etudiant;// cet attribut ne nous sert que dans le cas de la commande "notes"
 }Commande_Epreuve;
 
-
-typedef struct Commande_Note
-{
-    int num_semestre;
-    char nom_etudiant[MAX_CHAR];
-    char nom_matiere[MAX_CHAR];
-    char nom_epreuve[MAX_CHAR];
-    float note;
-    
-}Commande_Note;
-
-
 typedef struct Matiere
 {
     char nom[MAX_CHAR];
@@ -51,12 +32,24 @@ typedef struct Matiere
     
     int indice_epreuve; //cet attribut ne nous sert que dans la commande "note"
 }Matiere;
+
+
 typedef struct semestre
 {
+    int nb_note;
     int nb_matiere;
     Matiere liste_mat[10];
 
 }semestre;
+
+typedef struct Commande_Formation{
+    BOOL nb_UE_is_def;
+    unsigned int nb_UE;
+    semestre liste_semestre[2];
+
+
+}Commande_Formation;
+
 
 typedef struct Etudiant
 {
@@ -65,9 +58,10 @@ typedef struct Etudiant
     int nb_note_s1;
     int nb_note_s2;
     int nb_matiere_evalue;
+    semestre liste_note_semestre[2];
+
     Matiere liste_evaluation_matiere[10];
-    semestre s1;
-    semestre s2;
+
 
     //char matiere_note[50][MAX_CHAR];// contient une chaine de char tel que "<matiere epreuve>" ex "programmation dst"
     //int note[50];

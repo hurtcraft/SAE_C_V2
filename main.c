@@ -7,11 +7,12 @@
 #include "commandes.h"
 
 int main(){
+
     
     const int NB_EPR_MAX=5;
     const int NB_MAT_MAX=10;
     Commande ma_commande;
-    Commande_Formation commande_F;
+    Commande_Formation ma_formation;
     Commande_Epreuve commande_E;
     Matiere liste_mat[NB_MAT_MAX];
     Etudiant liste_etu[100];
@@ -48,45 +49,58 @@ int main(){
     verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere);
     */
    
-    
-    init_formation(ma_commande,&commande_F);
+    //init_formation(ma_commande,&ma_formation);
 
-    int nb_UE=commande_F.nb_UE;
+    int nb_UE;
     do
     {
         ma_commande=get_commande();
-        if (strcmp(ma_commande.nom_commande,"epreuve")==0)
+
+        if (strcmp(ma_commande.nom_commande,"formation")==0)
         {
-            create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
+            if(create_formation(ma_commande,&ma_formation)==True)
+            {
+                
+                nb_UE=ma_formation.nb_UE;
+                
+                semestre s1;
+                semestre s2;
+                s1.nb_matiere=0;
+                s2.nb_matiere=0;
+                ma_formation.liste_semestre[0]=s1;
+                ma_formation.liste_semestre[1]=s2;
+
+            };
+            //continue; on a pas besoin de faire le reste si la formation n'est pas cree
         }
-        else if(strcmp(ma_commande.nom_commande,"coefficients")==0) {
-            verif_coeff(ma_commande,liste_mat,nb_matiere,nb_UE);
+        if (ma_formation.nb_UE_is_def==True)
+        {
+            
+            if (strcmp(ma_commande.nom_commande,"epreuve")==0)
+            {
+                create_epreuve(ma_commande,nb_UE,&ma_formation);
+            }
+                    
+            else if(strcmp(ma_commande.nom_commande,"coefficients")==0) {
+                verif_coeff(ma_commande,ma_formation);
+            }
+            else if (strcmp(ma_commande.nom_commande,"note")==0){
+                add_note(ma_commande,ma_formation,liste_etu,&nb_etudiant);
+                //printf("nom etu %d\n",liste_etu[nb_etudiant-1].liste_note_semestre[0].nb_note);
+                //printf("nb_note etud %d \n",liste_etu[nb_etudiant-1].liste_note_semestre[0].);
+            }
+            
+            else if (strcmp(ma_commande.nom_commande,"notes")==0){
+                verif_note(ma_commande,liste_etu,ma_formation,nb_etudiant);
+            }
         }
-        else if (strcmp(ma_commande.nom_commande,"note")==0){
-            add_note(ma_commande,nb_matiere,liste_mat,liste_etu,&nb_etudiant);
+        else{
+            printf("Le nombre d'UE n'est pas defini\n");
         }
-        else if (strcmp(ma_commande.nom_commande,"notes")==0){
-            verif_note(ma_commande,liste_etu,liste_mat,nb_etudiant,nb_matiere);
-        }
-        printf("nb matiere %d\n",nb_matiere);
+
+       
     } while (True);
-    
-    
-    //add_note(ma_commande,nb_matiere);
-    
 
-
-
-    /*
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-    ma_commande=get_commande();
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-    ma_commande=get_commande();
-    create_epreuve(ma_commande,&commande_E,nb_UE,liste_mat,&nb_matiere);
-
-    printf("--------------------------------------------------\n");    
-    verif_coeff(ma_commande,liste_mat,nb_matiere,nb_UE);
-    */
     return 0;
 
 }

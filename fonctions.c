@@ -14,13 +14,13 @@ BOOL commande_is_valid(Commande ma_commande){
     }   
     return True;
 }
-int get_matiere_indice(Commande_Epreuve commande_E,Matiere liste_mat[],int nb_matiere){
+int get_matiere_indice(char nom_matiere[],Matiere liste_mat[],int nb_matiere){
     /*
         return l'indice qui a était attribuer à la matiere dans liste_mat[] 
         sinon renvoie -1 si la matiere n'existe pas 
     */
     for (size_t i = 0; i < nb_matiere; i++){
-        if(strcmp(commande_E.nom_matiere,liste_mat[i].nom)==0){
+        if(strcmp(nom_matiere,liste_mat[i].nom)==0){
             
             return i;
         }
@@ -32,7 +32,7 @@ int get_matiere_indice(Commande_Epreuve commande_E,Matiere liste_mat[],int nb_ma
 
 BOOL epreuve_already_exist(Commande_Epreuve commande_E,Matiere liste_mat[],int nb_matiere){
 
-    int indice=get_matiere_indice(commande_E,liste_mat,nb_matiere);
+    int indice=get_matiere_indice(commande_E.nom_matiere,liste_mat,nb_matiere);
     if (indice!=-1)
     {
         for (size_t i = 0; i < liste_mat[indice].nb_epreuve; i++)
@@ -51,7 +51,7 @@ BOOL epreuve_already_exist(Commande_Epreuve commande_E,Matiere liste_mat[],int n
 BOOL semestre_is_valid(Commande ma_commande){
     //on sait que si une commande a besoin du numero de semestre , ce dernier sera toujours le premier arg
     if (atoi(ma_commande.args[0])>2 || atoi(ma_commande.args[0])<1 ){
-        printf("Le numero de semestre saisie est incorrect\n");
+        printf("Le numero de semestre est incorrect\n");
         return False;
     }
     return True;
