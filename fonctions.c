@@ -73,3 +73,35 @@ int get_etudiant_indice(char nom_etudiant[],Etudiant liste_etu[],int nb_etudiant
     }
     return indice_etudiant;
 }
+void affiche_erreur_note(int num_erreur){
+    switch (num_erreur)
+    {
+    case 0:
+        printf("Notes correctes\n");
+        break;
+    case 1:
+        printf("Etudiant inconnu\n");
+        break;
+    case 2:
+        printf("Il manque au moins une note pour cet etudiant\n");
+        break;
+    default:
+        break;
+    }
+}
+void affiche_erreur_coeff(int num_erreur){
+    switch (num_erreur)
+    {
+    case 0:
+        printf("Coefficients corrects\n");
+        break;
+    case 1:
+        printf("Le semestre ne contient aucune epreuve\n");
+        break;
+    case 2:
+        printf("Les coefficients d'au moins une UE de ce semestre sont tous nuls\n");
+        break;
+    default:
+        break;
+    }
+}

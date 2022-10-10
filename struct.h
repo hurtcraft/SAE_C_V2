@@ -54,28 +54,19 @@ typedef struct Commande_Formation{
 typedef struct Etudiant
 {
     char nom[MAX_CHAR];
+/*
     int nb_note;
     int nb_note_s1;
     int nb_note_s2;
+*/
     int nb_matiere_evalue;
     semestre liste_note_semestre[2];
-
+    // pb ici
     Matiere liste_evaluation_matiere[10];
 
 
     //char matiere_note[50][MAX_CHAR];// contient une chaine de char tel que "<matiere epreuve>" ex "programmation dst"
-    //int note[50];
-    /*
-        ici on fait une projection entre "matiere note" et "note"
-        c'est a dire que note[0] va correspondre a la note attribuer 
-        a matiere_note[0];
 
-        ex : matiere_note[0] <-- "math DST"
-             note[0] <-- 12
-             ici la note de l'etudiant pour le DST de math sera de 12
-
-        
-    */
 }Etudiant;
 
 
