@@ -62,7 +62,7 @@ typedef struct Etudiant
     int nb_matiere_evalue;
     semestre liste_note_semestre[2];
     // pb ici
-    Matiere liste_evaluation_matiere[10];
+    //Matiere liste_evaluation_matiere[10];
 
 
     //char matiere_note[50][MAX_CHAR];// contient une chaine de char tel que "<matiere epreuve>" ex "programmation dst"

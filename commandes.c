@@ -224,7 +224,7 @@ void add_note(Commande ma_commande,Commande_Formation ma_formation,Etudiant list
     char nom_etudiant[MAX_CHAR];
     char nom_matiere[MAX_CHAR];
     char nom_epreuve[MAX_CHAR];
-    float note = atof(ma_commande.args[4]);
+    double note = atof(ma_commande.args[4]);
     strcpy(nom_etudiant,ma_commande.args[1]);
     strcpy(nom_matiere,ma_commande.args[2]);
     strcpy(nom_epreuve,ma_commande.args[3]);
@@ -262,7 +262,6 @@ void add_note(Commande ma_commande,Commande_Formation ma_formation,Etudiant list
         printf("Epreuve inconnue\n");
         return;
     }
-
     if ( note>20 || note<0)
     {
         printf("Note incorrecte\n");
@@ -312,7 +311,8 @@ void add_note(Commande ma_commande,Commande_Formation ma_formation,Etudiant list
         mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant = note;
         strcpy(mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].nom_epreuve, nom_epreuve);
         strcpy(mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].nom ,  nom_matiere);
-        
+        printf("nom : %s  nom epreuve : %s note : %f \n",mon_etudiant.nom,mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].nom_epreuve,mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].liste_epr[indice_epreuve].note_etudiant );
+
         
         mon_etudiant.liste_note_semestre[num_semestre-1].liste_mat[mon_etudiant.nb_matiere_evalue].indice_epreuve+=1;
         mon_etudiant.nb_matiere_evalue+=1;
@@ -331,7 +331,7 @@ void add_note(Commande ma_commande,Commande_Formation ma_formation,Etudiant list
         strcpy(liste_etu[etudiant_indice].nom, nom_etudiant);
         // on regarde si l'etudiant a une note dans la matiere en question
         int indice_matiere=get_matiere_indice(nom_matiere,liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat , liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].nb_matiere);
-        printf("matiere indice %d matiere nom %s ",indice_matiere,nom_matiere);
+        //printf("matiere indice %d matiere nom %s ",indice_matiere,nom_matiere);
         if (indice_matiere==-1)
         {
             indice_matiere = liste_etu[etudiant_indice].nb_matiere_evalue;
@@ -343,6 +343,8 @@ void add_note(Commande ma_commande,Commande_Formation ma_formation,Etudiant list
         liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].note_etudiant = note;
         liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].num_semestre = num_semestre;
         //liste_etu[etudiant_indice].nb_note+=1;
+        printf("nom : %s  nom epreuve : %s note : %f \n",liste_etu[etudiant_indice].nom,liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].nom_epreuve,liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].liste_epr[indice_epreuve].note_etudiant );
+
         liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].liste_mat[indice_matiere].indice_epreuve+=1;
         liste_etu[etudiant_indice].liste_note_semestre[num_semestre-1].nb_note+=1;
         

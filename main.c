@@ -55,7 +55,11 @@ int main(){
     do
     {
         ma_commande=get_commande();
-
+        if (strcmp(ma_commande.nom_commande,"e")==0)
+        {
+            break;
+        }
+        
         if (strcmp(ma_commande.nom_commande,"formation")==0)
         {
             if(create_formation(ma_commande,&ma_formation)==True)
@@ -107,6 +111,7 @@ int main(){
 
        
     } while (True);
+    
 
     return 0;
 
