@@ -105,3 +105,46 @@ void affiche_erreur_coeff(int num_erreur){
         break;
     }
 }
+
+float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Commande_Formation ma_formation){
+    static float *tab_coeff=NULL;
+    tab_coeff=calloc(ma_formation.nb_UE,sizeof(float));
+    if (tab_coeff==NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+    Matiere *liste_mat=ma_formation.liste_semestre[num_semestre].liste_mat;
+    int nb_matiere=ma_formation.liste_semestre[num_semestre].nb_matiere;
+    int matiere_indice=get_matiere_indice(nom_matiere,liste_mat,nb_matiere);
+    for (size_t i = 0; i < liste_mat[matiere_indice].nb_epreuve; i++)
+    {
+        if (strcmp(liste_mat[matiere_indice].liste_epr[i].nom_epreuve,nom_epreuve)==0)
+        {
+            for (size_t j = 0; j < ma_formation.nb_UE; j++)
+            {
+                tab_coeff[j]=liste_mat[matiere_indice].liste_epr[i].tab_coeff_UE[j];
+            }
+            break;
+        }
+        
+    }
+    return tab_coeff;
+    
+}
+
+float somme_coeff(float tab_coeff[],int nb_UE){
+    float result=0;
+    for (size_t i = 0; i < nb_UE; i++)
+    {
+        result+=tab_coeff[i];    
+    }
+    return result;
+    
+}
+void print_char(char str[],int nb_char){
+    for (size_t i = 0; i < nb_char; i++)
+    {
+        printf("%c");
+    }
+    
+}

@@ -1,11 +1,19 @@
 #ifndef __STRUCT_H
 #define __STRUCT_H
-#define MAX_CHAR 31
+
 typedef enum BOOL {
     False,
     True,
 }BOOL;
-
+enum {
+NB_SEMESTRES = 2,
+MIN_UE = 3,
+MAX_UE = 6,
+MAX_MATIERES = 10,
+MAX_EPREUVES = 5,
+MAX_ETUDIANTS = 100,
+MAX_CHAR = 31
+};
 typedef struct Commande
 {
     
@@ -19,7 +27,7 @@ typedef struct Commande_Epreuve{
     unsigned int num_semestre;
     char nom_matiere[MAX_CHAR];
     char nom_epreuve[MAX_CHAR];
-    float tab_coeff_UE[6]; 
+    float tab_coeff_UE[MAX_UE]; 
 
     float note_etudiant;// cet attribut ne nous sert que dans le cas de la commande "notes"
 }Commande_Epreuve;
@@ -28,7 +36,7 @@ typedef struct Matiere
 {
     char nom[MAX_CHAR];
     int nb_epreuve;
-    Commande_Epreuve liste_epr[5];
+    Commande_Epreuve liste_epr[MAX_EPREUVES];
     
     int indice_epreuve; //cet attribut ne nous sert que dans la commande "note"
 }Matiere;
@@ -38,19 +46,9 @@ typedef struct semestre
 {
     int nb_note;
     int nb_matiere;
-    Matiere liste_mat[10];
+    Matiere liste_mat[MAX_MATIERES];
 
 }semestre;
-
-typedef struct Commande_Formation{
-    BOOL nb_UE_is_def;
-    unsigned int nb_UE;
-    semestre liste_semestre[2];
-
-
-}Commande_Formation;
-
-
 typedef struct Etudiant
 {
     char nom[MAX_CHAR];
@@ -60,14 +58,25 @@ typedef struct Etudiant
     int nb_note_s2;
 */
     int nb_matiere_evalue;
-    semestre liste_note_semestre[2];
+    semestre liste_note_semestre[NB_SEMESTRES];
     // pb ici
     //Matiere liste_evaluation_matiere[10];
-
+    int a;
 
     //char matiere_note[50][MAX_CHAR];// contient une chaine de char tel que "<matiere epreuve>" ex "programmation dst"
 
 }Etudiant;
+
+typedef struct Commande_Formation{
+    BOOL nb_UE_is_def;
+    unsigned int nb_UE;
+    semestre liste_semestre[NB_SEMESTRES];
+
+
+}Commande_Formation;
+
+
+
 
 
 #endif

@@ -11,6 +11,8 @@ BOOL semestre_is_valid(Commande ma_commande);
 int get_etudiant_indice(char nom_etudiant[],Etudiant liste_etu[],int nb_etudiant);
 void affiche_erreur_note(int num_erreur);
 void affiche_erreur_coeff(int num_erreur);
+float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Commande_Formation ma_formation);
+float somme_coeff(float tab_coeff[],int nb_UE);
 
 
 #endif
