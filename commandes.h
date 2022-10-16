@@ -4,10 +4,9 @@
 
 
 Commande get_commande();
-void exit_prog();
 
 BOOL create_formation(Commande ma_commande,Commande_Formation *ma_formation);
-BOOL create_epreuve(const Commande *ma_commande, int nb_UE,Commande_Formation *ma_formation);
+BOOL create_epreuve(const Commande *ma_commande,Commande_Formation *ma_formation);
 int verif_coeff(int num_semestre , Commande_Formation *ma_formation);
 void add_note(const Commande *ma_commande,Commande_Formation *ma_formation,Etudiant liste_etu[],int *nb_etudiant);
 int verif_note(int num_semestre ,char nom_etudiant[],Etudiant liste_etu[], Commande_Formation *ma_formation ,int nb_etudiant);

@@ -15,8 +15,8 @@ int main(){
     Matiere liste_mat[MAX_MATIERES];
     
     int nb_etudiant=0;
-    int nb_UE;
     int num_semestre;
+    
     char nom_etudiant[MAX_CHAR];
     do
     {
@@ -26,7 +26,7 @@ int main(){
         {
             if(create_formation(ma_commande,&ma_formation)==True)
             {
-                nb_UE=ma_formation.nb_UE;
+                
                 semestre s1;
                 semestre s2;
                 s1.nb_matiere=0;
@@ -42,7 +42,7 @@ int main(){
             
             if (strcmp(ma_commande.nom_commande,"epreuve")==0)
             {
-                create_epreuve(&ma_commande,nb_UE,&ma_formation);
+                create_epreuve(&ma_commande,&ma_formation);
             }
                     
             else if(strcmp(ma_commande.nom_commande,"coefficients")==0) {
@@ -55,7 +55,7 @@ int main(){
             
             else if (strcmp(ma_commande.nom_commande,"notes")==0){
                 num_semestre=atoi(ma_commande.args[0]);
-                
+                strcpy(nom_etudiant,ma_commande.args[1]);
                 
                 affiche_erreur_note(verif_note(num_semestre,nom_etudiant,liste_etu,&ma_formation,nb_etudiant));
             }
@@ -73,7 +73,7 @@ int main(){
         }
 
        
-    } while (True);
+    } while (strcmp(ma_commande.nom_commande,"exit")!=0);
     
 
     return 0;

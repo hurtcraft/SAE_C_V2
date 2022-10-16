@@ -3,20 +3,15 @@
 #include <string.h>
 #include <stdlib.h>
 void clear_str(char str[],int len){
+    // met tout les cases d'une chaine de charactere à 0
     for (size_t i = 0; i < len+1; i++){
         str[i]=0;
     }
 }
-BOOL commande_is_valid(Commande ma_commande){
-    if (ma_commande.nom_commande[0]==-1){
-        printf("Commande non reconnue ou manque d'argument \n");
-        return False;
-    }   
-    return True;
-}
+
 int get_matiere_indice(char nom_matiere[],Matiere liste_mat[],int nb_matiere){
     /*
-        return l'indice qui a était attribuer à la matiere dans liste_mat[] 
+        return l'indice qui a été attribuer à la matiere dans liste_mat[] 
         sinon renvoie -1 si la matiere n'existe pas 
     */
     for (size_t i = 0; i < nb_matiere; i++){
@@ -31,7 +26,9 @@ int get_matiere_indice(char nom_matiere[],Matiere liste_mat[],int nb_matiere){
 
 
 BOOL epreuve_already_exist(Commande_Epreuve commande_E,Matiere liste_mat[],int nb_matiere){
-
+    /*
+        renvoie True si l'epreuve existe deja False sinon
+    */
     int indice=get_matiere_indice(commande_E.nom_matiere,liste_mat,nb_matiere);
     if (indice!=-1)
     {
@@ -49,7 +46,9 @@ BOOL epreuve_already_exist(Commande_Epreuve commande_E,Matiere liste_mat[],int n
     
 }
 BOOL semestre_is_valid(int num_semestre){
-    //on sait que si une commande a besoin du numero de semestre , ce dernier sera toujours le premier arg
+    /*
+        renvoie False si le numero de semestre est incorrect
+    */
     if (num_semestre>2 || num_semestre<1 ){
         printf("Le numero de semestre est incorrect\n");
         return False;
@@ -74,6 +73,11 @@ int get_etudiant_indice(char nom_etudiant[],Etudiant liste_etu[],int nb_etudiant
     return indice_etudiant;
 }
 void affiche_erreur_note(int num_erreur){
+    /*
+        num_erreur sera le numero de l'erreur retourner
+        par notre fonction verif_note . De ce fait on pourra
+        traité et afficher l'erreur en question.
+    */
     switch (num_erreur)
     {
     case 0:
@@ -90,6 +94,11 @@ void affiche_erreur_note(int num_erreur){
     }
 }
 void affiche_erreur_coeff(int num_erreur){
+    /*
+        num_erreur sera le numero de l'erreur retourner
+        par notre fonction verif_coeff . De ce fait on pourra
+        traité et afficher l'erreur en question.
+    */
     switch (num_erreur)
     {
     case 0:
@@ -107,6 +116,9 @@ void affiche_erreur_coeff(int num_erreur){
 }
 
 float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Commande_Formation *ma_formation){
+    /*
+        retourne le tableau de coefficient pour une epreuve d'une matiere et d'un semestre donné
+    */
     static float *tab_coeff=NULL;
     tab_coeff=calloc(ma_formation->nb_UE,sizeof(float));
     if (tab_coeff==NULL)
@@ -132,16 +144,11 @@ float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Comm
     
 }
 
-float get_somme_coeff(float tab_coeff[],int nb_UE){
-    float result=0;
-    for (size_t i = 0; i < nb_UE; i++)
-    {
-        result+=tab_coeff[i];    
-    }
-    return result;
-    
-}
+
 void print_entete_UE(int *nb_UE){
+    /*
+        affiche les entete d'UE dans les commandes 7 et 8
+    */
     for (size_t i = 1; i < *nb_UE+1 ; i++)
     {
         if(i==1){
@@ -156,6 +163,11 @@ void print_entete_UE(int *nb_UE){
     }
 }
 char * add_space(char ma_chaine[],int nb_space){
+    /*
+        permet d'ajouté des espaces en fin 
+        d'une chaine de charactere , cela facilitera
+        les affichages dans les commandes 7 et 8
+    */
     static char buffer[MAX_CHAR];
     strcpy(buffer,ma_chaine);
     while (strlen(buffer)<nb_space)
