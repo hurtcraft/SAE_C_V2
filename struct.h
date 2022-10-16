@@ -52,18 +52,8 @@ typedef struct semestre
 typedef struct Etudiant
 {
     char nom[MAX_CHAR];
-/*
-    int nb_note;
-    int nb_note_s1;
-    int nb_note_s2;
-*/
-    int nb_matiere_evalue;
     semestre liste_note_semestre[NB_SEMESTRES];
-    // pb ici
-    //Matiere liste_evaluation_matiere[10];
-    int a;
-
-    //char matiere_note[50][MAX_CHAR];// contient une chaine de char tel que "<matiere epreuve>" ex "programmation dst"
+    float releve_note[NB_SEMESTRES][MAX_UE];
 
 }Etudiant;
 

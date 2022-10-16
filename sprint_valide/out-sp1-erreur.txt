@@ -1,5 +1,4 @@
 Le nombre d'UE n'est pas defini
-Le nombre d'UE n'est pas defini
 Le nombre d'UE est defini
 Le semestre ne contient aucune epreuve
 Le nombre d'UE est deja defini

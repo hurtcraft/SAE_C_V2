@@ -1,4 +1,3 @@
-epreuve 1 Programmation Projet 1 2 0
 coefficients 1
 formation 3
 coefficients 1

@@ -48,9 +48,9 @@ BOOL epreuve_already_exist(Commande_Epreuve commande_E,Matiere liste_mat[],int n
     return False;
     
 }
-BOOL semestre_is_valid(Commande ma_commande){
+BOOL semestre_is_valid(int num_semestre){
     //on sait que si une commande a besoin du numero de semestre , ce dernier sera toujours le premier arg
-    if (atoi(ma_commande.args[0])>2 || atoi(ma_commande.args[0])<1 ){
+    if (num_semestre>2 || num_semestre<1 ){
         printf("Le numero de semestre est incorrect\n");
         return False;
     }
@@ -106,21 +106,21 @@ void affiche_erreur_coeff(int num_erreur){
     }
 }
 
-float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Commande_Formation ma_formation){
+float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Commande_Formation *ma_formation){
     static float *tab_coeff=NULL;
-    tab_coeff=calloc(ma_formation.nb_UE,sizeof(float));
+    tab_coeff=calloc(ma_formation->nb_UE,sizeof(float));
     if (tab_coeff==NULL)
     {
         exit(EXIT_FAILURE);
     }
-    Matiere *liste_mat=ma_formation.liste_semestre[num_semestre].liste_mat;
-    int nb_matiere=ma_formation.liste_semestre[num_semestre].nb_matiere;
+    Matiere *liste_mat=ma_formation->liste_semestre[num_semestre].liste_mat;
+    int nb_matiere=ma_formation->liste_semestre[num_semestre].nb_matiere;
     int matiere_indice=get_matiere_indice(nom_matiere,liste_mat,nb_matiere);
     for (size_t i = 0; i < liste_mat[matiere_indice].nb_epreuve; i++)
     {
         if (strcmp(liste_mat[matiere_indice].liste_epr[i].nom_epreuve,nom_epreuve)==0)
         {
-            for (size_t j = 0; j < ma_formation.nb_UE; j++)
+            for (size_t j = 0; j < ma_formation->nb_UE; j++)
             {
                 tab_coeff[j]=liste_mat[matiere_indice].liste_epr[i].tab_coeff_UE[j];
             }
@@ -132,7 +132,7 @@ float *get_tab_coeff(int num_semestre,char nom_matiere[],char nom_epreuve[],Comm
     
 }
 
-float somme_coeff(float tab_coeff[],int nb_UE){
+float get_somme_coeff(float tab_coeff[],int nb_UE){
     float result=0;
     for (size_t i = 0; i < nb_UE; i++)
     {
@@ -141,10 +141,26 @@ float somme_coeff(float tab_coeff[],int nb_UE){
     return result;
     
 }
-void print_char(char str[],int nb_char){
-    for (size_t i = 0; i < nb_char; i++)
+void print_entete_UE(int *nb_UE){
+    for (size_t i = 1; i < *nb_UE+1 ; i++)
     {
-        printf("%c");
+        if(i==1){
+            printf("                   UE%d",i);
+        }
+        else if (i<*nb_UE){
+            printf("  UE%d ",i);
+        }
+        else{
+            printf("  UE%d \n",i);
+        }
     }
-    
+}
+char * add_space(char ma_chaine[],int nb_space){
+    static char buffer[MAX_CHAR];
+    strcpy(buffer,ma_chaine);
+    while (strlen(buffer)<nb_space)
+    {
+        strncat(buffer," ",1);
+    }
+    return buffer;
 }
