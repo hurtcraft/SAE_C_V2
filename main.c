@@ -21,7 +21,9 @@ int main(){
     do
     {
         ma_commande=get_commande();
-        
+        if(strcmp(ma_commande.nom_commande,"exit")==0){
+            exit(EXIT_SUCCESS);
+        }
         if (strcmp(ma_commande.nom_commande,"formation")==0)
         {
             if(create_formation(ma_commande,&ma_formation)==True)
@@ -39,7 +41,7 @@ int main(){
 
         if (ma_formation.nb_UE_is_def==True)
         {
-            
+
             if (strcmp(ma_commande.nom_commande,"epreuve")==0)
             {
                 create_epreuve(&ma_commande,&ma_formation);
@@ -73,7 +75,7 @@ int main(){
         }
 
        
-    } while (strcmp(ma_commande.nom_commande,"exit")!=0);
+    } while (True);
     
 
     return 0;
