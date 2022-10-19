@@ -16,29 +16,29 @@ int main()
     int nb_etudiant = 0;
     int num_semestre;
     char nom_etudiant[MAX_CHAR];
-    
+
     do
     {
 
-        ma_commande=get_commande();
-        if (strcmp(ma_commande.nom_commande,"exit")==0)
+        ma_commande = get_commande();
+        if (strcmp(ma_commande.nom_commande, "exit") == 0)
         {
             exit(EXIT_SUCCESS);
         }
-        
-        if (strcmp(ma_commande.nom_commande,"formation")==0)
+
+        if (strcmp(ma_commande.nom_commande, "formation") == 0)
         {
             if (create_formation(ma_commande, &ma_formation) == True)
             {
 
                 semestre s1;
                 semestre s2;
-                s1.nb_matiere=0;
-                s2.nb_matiere=0;
-                ma_formation.liste_semestre[0]=s1;
-                ma_formation.liste_semestre[1]=s2;
+                s1.nb_matiere = 0;
+                s2.nb_matiere = 0;
+                ma_formation.liste_semestre[0] = s1;
+                ma_formation.liste_semestre[1] = s2;
             }
-            continue;// on a pas besoin de faire le reste si la formation n'est pas cree
+            continue; // on a pas besoin de faire le reste si la formation n'est pas cree
         }
 
         if (ma_formation.nb_UE_is_def == True)
@@ -82,9 +82,7 @@ int main()
             printf("Le nombre d'UE n'est pas defini\n");
         }
 
-       
     } while (True);
-    
 
     return 0;
 }

@@ -193,14 +193,7 @@ int verif_coeff(int num_semestre, Commande_Formation *ma_formation)
 
         for (size_t j = 0; j < liste_mat[i].nb_epreuve; j++)
         { // parcours epreuves
-            /*
-            if(liste_mat[i].liste_epr[j].num_semestre==num_semestre){
-                if (liste_mat[i].nb_epreuve==0)
-                {
-                    count++;
-                    continue;
-                }
-            */
+
             for (size_t z = 0; z < nb_UE; z++)
             {
                 // parcours UE
@@ -229,6 +222,7 @@ int verif_coeff(int num_semestre, Commande_Formation *ma_formation)
 
     return 0; //"Coefficients corrects\n"
 }
+//===================================Commande note=============================
 
 void add_note(const Commande *ma_commande, Commande_Formation *ma_formation, Etudiant liste_etu[], int *nb_etudiant)
 {
@@ -359,6 +353,7 @@ void add_note(const Commande *ma_commande, Commande_Formation *ma_formation, Etu
     }
     printf("Note ajoutee a l'etudiant\n");
 }
+//===================================Commande notes=============================
 
 int verif_note(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Commande_Formation *ma_formation, int nb_etudiant)
 {
@@ -391,6 +386,7 @@ int verif_note(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Comm
 
     return 0; //"Notes correctes\n"
 }
+//===================================Commande releve=============================
 
 void releve(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Commande_Formation *ma_formation, int nb_etudiant, BOOL do_affichage)
 {
@@ -529,6 +525,8 @@ void releve(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Command
     free(somme_coeff_moyenne_UE);
     free(tab_coeff);
 }
+//===================================Commande decision=============================
+
 void decision(const Commande *ma_commande, Etudiant liste_etu[], int nb_etudiant, Commande_Formation *ma_formation)
 {
     char nom_etudiant[MAX_CHAR];
@@ -570,7 +568,7 @@ void decision(const Commande *ma_commande, Etudiant liste_etu[], int nb_etudiant
     for (size_t i = 1; i < NB_SEMESTRES + 1; i++)
     {
         releve(i, nom_etudiant, liste_etu, &*ma_formation, nb_etudiant, False);
-        printf("s%c               ", i + '0');
+        printf("S%c               ", i + '0');
         for (size_t j = 0; j < ma_formation->nb_UE; j++)
         {
             moyenne_UE = liste_etu[indice_etudiant].releve_note[i - 1][j];
