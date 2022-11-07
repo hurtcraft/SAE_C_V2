@@ -16,11 +16,6 @@ Commande get_commande()
 
     scanf(" %[^\n]", buffer);
 
-    /*
-    if(buffer[strlen(buffer)+1]==' '){
-        buffer[strlen(buffer)]='\0';
-    }
-    */
     unsigned int i = 0;
     unsigned int count = 0;
     strcat(buffer, " "); // l'ajout d'un espace est necessaire
@@ -62,7 +57,9 @@ Commande get_commande()
 BOOL create_formation(Commande ma_commande, Commande_Formation *commande_F)
 {
     /*
-        return True si la formation à pu se créer
+        ma_commande -> la commande qu'on aura saisie
+        *commande_F -> la formation qu'on va crée
+        cree une formation et return True si la formation à pu se créer False sinon
     */
 
     int nb_UE = atoi(ma_commande.args[0]);
@@ -92,6 +89,8 @@ BOOL create_formation(Commande ma_commande, Commande_Formation *commande_F)
 BOOL create_epreuve(const Commande *ma_commande, Commande_Formation *ma_formation)
 {
     /*
+        ma_commande -> la commande qu'on aura saisie
+        *ma_formation -> notre formation
         return True si l'epreuve a pu se cree False sinon
     */
     int num_semestre = atoi(ma_commande->args[0]);
@@ -166,6 +165,8 @@ BOOL create_epreuve(const Commande *ma_commande, Commande_Formation *ma_formatio
 int verif_coeff(int num_semestre, Commande_Formation *ma_formation)
 {
     /*
+        num_semestre -> numero du semestre dont on souhaite verifier les coeff
+        *ma_formation -> notre formation
         retourne un nombre et en fonction du nombre que verif_coeff retourne
         on pourra gérer l'affichage avec "void affiche_erreur_coeff(int num_erreur)"
     */
@@ -202,8 +203,6 @@ int verif_coeff(int num_semestre, Commande_Formation *ma_formation)
                     tab_UE[z] += 1;
                 }
             }
-
-            //}
         }
     }
     if (nb_matiere == 0)
@@ -227,6 +226,10 @@ int verif_coeff(int num_semestre, Commande_Formation *ma_formation)
 void add_note(const Commande *ma_commande, Commande_Formation *ma_formation, Etudiant liste_etu[], int *nb_etudiant)
 {
     /*
+        *ma_commande -> notre commande
+        *ma_formation -> notre formation
+        liste_etu[] -> liste contenant tout les étudiants
+        *nb_etudiant -> nombre d'étudiant
         ajoute des notes a un etudiant
     */
     int num_semestre = atoi(ma_commande->args[0]);
@@ -357,7 +360,19 @@ void add_note(const Commande *ma_commande, Commande_Formation *ma_formation, Etu
 
 int verif_note(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Commande_Formation *ma_formation, int nb_etudiant)
 {
+    /*
+        num_semestre -> numero du semestre dont on souhaite vérifier les notes
+        nom_etudiant[] -> nom de l'etudiant
+        liste_etu[] -> liste contenant tout les étudiants
+        *ma_formation -> notre formation
+        nb_etudiant -> le nombre d'etudiant
 
+        cette fonction verifie les notes d'un étudiant et renvoie un entier : -1 si le semestre saisie n'est pas valide
+                                                                               1 si l'etudiant est inconnue
+                                                                               2 si il manque au moins une note a l'etudiant
+                                                                               0 tout est correct
+
+    */
     if (semestre_is_valid(num_semestre) == False)
     {
         return -1;
@@ -390,9 +405,18 @@ int verif_note(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Comm
 
 void releve(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Commande_Formation *ma_formation, int nb_etudiant, BOOL do_affichage)
 {
-    /* la variable do_affichage est un booleen qui lorsque elle est a True , fera les affichages ,
+    /* 
+        num_semestre -> numero du semestre dont on souhaite vérifier les notes
+        nom_etudiant[] -> nom de l'etudiant
+        liste_etu[] -> liste contenant tout les étudiants
+        *ma_formation -> notre formation
+        nb_etudiant -> le nombre d'etudiant
+
+        do_affichage -> variable booleen qui lorsque elle est a True , fera les affichages ,
         et lorsque cette variable est a False , elle ne fera pas les affichages , cela nous permettera
         d'utilisé la fonction "releve" dans la fonction decision plus bas
+
+        cette fonction permet d'avoir le releve d'un eleve et de l'afficher ou non avec do_affichage
     */
     if (semestre_is_valid(num_semestre) == False)
     {
@@ -529,6 +553,14 @@ void releve(int num_semestre, char nom_etudiant[], Etudiant liste_etu[], Command
 
 void decision(const Commande *ma_commande, Etudiant liste_etu[], int nb_etudiant, Commande_Formation *ma_formation)
 {
+    /*
+        *ma_commande -> commande qu'on aura saisie
+        liste_etu[] -> liste des etudiants
+        nb_etudiant -> nombre d'etudiant
+        *ma_formation -> notre formation
+
+        cette fonction affiche la decision du conseil pour un eleve donner 
+    */
     char nom_etudiant[MAX_CHAR];
     strcpy(nom_etudiant, ma_commande->args[0]);
     int indice_etudiant = get_etudiant_indice(nom_etudiant, liste_etu, nb_etudiant);
